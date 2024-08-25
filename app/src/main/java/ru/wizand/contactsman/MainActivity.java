@@ -1,16 +1,23 @@
 package ru.wizand.contactsman;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -43,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         // Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Contacts Manager");
+        getSupportActionBar().setTitle(R.string.contacts_manager_string);
 
         // RecyclerView
         recyclerView = findViewById(R.id.recycler_view_contacts);
@@ -67,22 +74,123 @@ public class MainActivity extends AppCompatActivity {
                 addAndEditContacts(false, null, -1);
             }
         });
-
-
-
     }
 
-    private void addAndEditContacts(final boolean isUpdated, final Contact contact, final int position) {
-        LayoutInflater layoutInflater = LayoutInflater.from.(getApplicationContext());
+    public void addAndEditContacts(final boolean isUpdated, final Contact contact, final int position) {
+        LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
         View view = layoutInflater.inflate(R.layout.layout_add_contact,null);
 
-        AlertDialog.Builder alertDialog =  new AlertDialog.Builder(MainActivity.this);
-        alertDialog.setView(view);
+        AlertDialog.Builder alerDialogBuilder =  new AlertDialog.Builder(MainActivity.this);
+        alerDialogBuilder.setView(view);
 
         TextView contactTitle = view.findViewById(R.id.new_contact_title);
         final EditText newContact = view.findViewById(R.id.name);
+        final EditText contactEmail = view.findViewById(R.id.email);
+        final EditText contactPhone = view.findViewById(R.id.phone);
+
+        contactTitle.setText(!isUpdated ? getString(R.string.add_new_contact) : getString(R.string.edit_contact));
+
+        if (isUpdated && contact != null) {
+            newContact.setText(contact.getName());
+            contactEmail.setText(contact.getEmail());
+            contactPhone.setText(contact.getPhone());
+        }
+
+        alerDialogBuilder.setCancelable(false)
+                .setPositiveButton(isUpdated ? getString(R.string.update) : getString(R.string.save), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setNegativeButton("Delete",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (isUpdated){
+                                    DeleteContact(contact, position);
+
+                                } else{
+                                    dialogInterface.cancel();
+                                }
+                            }
+                        });
+
+        final AlertDialog alertDialog = alerDialogBuilder.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(newContact.getText().toString())){
+                    Toast.makeText(MainActivity.this, getString(R.string.please_enter_the_name),
+                            Toast.LENGTH_SHORT).show();
+                 return; } else {
+                    alertDialog.dismiss();
+                }
+                if (isUpdated && contact != null) {
+                    UpdateContact(newContact.getText().toString(),
+                            contactEmail.getText().toString(),
+                            contactPhone.getText().toString(),
+                            position);
+                } else {
+                    CreateContact(newContact.getText().toString(),
+                            contactEmail.getText().toString(),
+                            contactPhone.getText().toString(),
+                            position);
+                }
+            }
+        });
+
+    }
+
+    private void CreateContact(String name, String email, String phone, int position) {
+
+        long id = db.insertContact(name, email, phone);
+        Contact contact = db.getContact(id);
+
+        if (contact != null) {
+            contactArrayList.add(0, contact);
+            contactsAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void UpdateContact(String name, String email, String phone, int position) {
+        Contact contact = contactArrayList.get(position);
+
+        contact.setName(name);
+        contact.setEmail(email);
+        contact.setPhone(phone);
+
+        db.updateContact(contact);
+
+        contactArrayList.set(position,contact);
+        contactsAdapter.notifyDataSetChanged();
+    }
+
+    private void DeleteContact(Contact contact, int position) {
+
+        contactArrayList.remove(position);
+        db.deleteContact(contact);
+        contactsAdapter.notifyDataSetChanged();
+    }
+
+    // Menu bar
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return  super.onOptionsItemSelected(item);
     }
 }

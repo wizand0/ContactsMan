@@ -40,7 +40,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         this.context = context;
         this.contactArrayList = contacts;
         this.mainActivity = mainActivity;
-
     }
 
     @NonNull
@@ -52,8 +51,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder,int positions) {
-        final Contact contact = contactArrayList.get(positions);
+    public void onBindViewHolder(@NonNull MyViewHolder holder,int position) {
+        final Contact contact = contactArrayList.get(position);
 
         holder.name.setText(contact.getName());
         holder.email.setText(contact.getEmail());
@@ -62,10 +61,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    mainActivity.addAndEditContacts(true, contact, positions);
+                    mainActivity.addAndEditContacts(true, contact, position);
             }
         });
-
     }
 
     @Override

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:lineSpacingExtra="10sp"
-        android:text="New Contact"
+        android:text="@string/new_contact"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -22,9 +22,9 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:gravity="top"
-        android:hint=" Contact Name "
+        android:hint="@string/contact_name"
         android:inputType="textCapSentences|textMultiLine"
-        android:lines="4"
+        android:lines="3"
         android:textSize="16sp" />
 
     <EditText
@@ -33,9 +33,9 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:gravity="top"
-        android:hint=" Contact Email "
+        android:hint="@string/contact_email"
         android:inputType="textCapSentences|textMultiLine"
-        android:lines="4"
+        android:lines="3"
         android:textSize="16sp" />
 
     <EditText
@@ -44,9 +44,9 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:gravity="top"
-        android:hint=" Contact Phone "
+        android:hint="@string/contact_phone"
         android:inputType="textCapSentences|textMultiLine"
-        android:lines="4"
+        android:lines="3"
         android:textSize="16sp" />
 
 </LinearLayout>

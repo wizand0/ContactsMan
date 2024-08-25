@@ -69,12 +69,12 @@ public class Contact {
 
     // 5- SQL Querry
     public static final String CREATE_TABLE =
-            "CREATE TABLE" + TABLE_NAME + "("
-            + COLUMN_ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_NAME + " TEXT, "
-            + COLUMN_EMAIL + " TEXT, "
-            + COLUMN_PHONE + " TEXT " + "DATETIME DEFAULT CURRENT_TIMESTAMP"
-            + ")";
+            "CREATE TABLE " + TABLE_NAME + "("
+                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COLUMN_NAME + " TEXT,"
+                    + COLUMN_EMAIL + " TEXT,"
+                    + COLUMN_PHONE + " DATETIME DEFAULT CURRENT_TIMESTAMP"
+                    + ")";
 
 
 
