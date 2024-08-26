@@ -22,8 +22,9 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:gravity="top"
+        android:autofillHints="@string/contact_name"
         android:hint="@string/contact_name"
-        android:inputType="textCapSentences|textMultiLine"
+        android:inputType="text"
         android:lines="3"
         android:textSize="16sp" />
 
@@ -31,10 +32,12 @@
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints="@string/contact_email"
         android:background="@android:color/transparent"
         android:gravity="top"
         android:hint="@string/contact_email"
-        android:inputType="textCapSentences|textMultiLine"
+        android:inputType="textEmailAddress"
+        android:paddingTop="20dp"
         android:lines="3"
         android:textSize="16sp" />
 
@@ -42,10 +45,12 @@
         android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints="@string/contact_phone"
         android:background="@android:color/transparent"
         android:gravity="top"
         android:hint="@string/contact_phone"
-        android:inputType="textCapSentences|textMultiLine"
+        android:inputType="phone"
+        android:paddingTop="20dp"
         android:lines="3"
         android:textSize="16sp" />
 

@@ -1,25 +1,43 @@
 package ru.wizand.contactsman.db.entity;
 
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "contacts")
 public class Contact {
 
     //1 - Constants for Database
-    public static final String TABLE_NAME = "contacts";
-    public static final String COLUMN_ID = "contact_id";
-    public static final String COLUMN_NAME = "contact_name";
-    public static final String COLUMN_EMAIL = "contact_email";
-    public static final String COLUMN_PHONE = "contact_phone";
+//    public static final String TABLE_NAME = "contacts";
+
+//    public static final String COLUMN_ID = "contact_id";
+//    public static final String COLUMN_NAME = "contact_name";
+//    public static final String COLUMN_EMAIL = "contact_email";
+//    public static final String COLUMN_PHONE = "contact_phone";
 
     // 2- Variables
+    @ColumnInfo(name = "contact_name")
     private String name;
+
+    @ColumnInfo(name = "contact_email")
     private String email;
+
+    @ColumnInfo(name = "contact_id")
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @ColumnInfo(name = "contact_phone")
     private String phone;
 
     // 3 - Constructor
+    @Ignore
     public Contact() {
 
     }
 
+    @Ignore
     public Contact(String name, String email, int id, String phone) {
         this.name = name;
         this.email = email;
@@ -67,14 +85,16 @@ public class Contact {
         this.phone = phone;
     }
 
+
     // 5- SQL Querry
-    public static final String CREATE_TABLE =
-            "CREATE TABLE " + TABLE_NAME + "("
-                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COLUMN_NAME + " TEXT,"
-                    + COLUMN_EMAIL + " TEXT,"
-                    + COLUMN_PHONE + " DATETIME DEFAULT CURRENT_TIMESTAMP"
-                    + ")";
+    //It is not need for room database (only for sqlite)
+//    public static final String CREATE_TABLE =
+//            "CREATE TABLE " + TABLE_NAME + "("
+//                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+//                    + COLUMN_NAME + " TEXT,"
+//                    + COLUMN_EMAIL + " TEXT,"
+//                    + COLUMN_PHONE + " DATETIME DEFAULT CURRENT_TIMESTAMP"
+//                    + ")";
 
 
 

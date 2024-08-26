@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:background="#A5C4F4"
     android:padding="10dp">
 
     <TextView

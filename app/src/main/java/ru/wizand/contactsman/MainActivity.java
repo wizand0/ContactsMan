@@ -24,13 +24,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import ru.wizand.contactsman.adapter.ContactsAdapter;
-import ru.wizand.contactsman.db.DatabaseHelper;
+import ru.wizand.contactsman.db.ContactAppDatabase;
+
 import ru.wizand.contactsman.db.entity.Contact;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ContactsAdapter contactsAdapter;
     private ArrayList<Contact> contactArrayList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private DatabaseHelper db;
+    private ContactAppDatabase contactAppDatabase;
 
 
     @Override
@@ -54,10 +56,17 @@ public class MainActivity extends AppCompatActivity {
 
         // RecyclerView
         recyclerView = findViewById(R.id.recycler_view_contacts);
-        db = new DatabaseHelper(this);
+
+        // Database
+        contactAppDatabase = Room.databaseBuilder(
+                getApplicationContext(),
+                ContactAppDatabase.class,
+                "ContactDB")
+                .allowMainThreadQueries()
+                .build();
 
         // Contacts List
-        contactArrayList.addAll(db.getAllContacts());
+        contactArrayList.addAll(contactAppDatabase.getContactDAO().getContacts());
 
         contactsAdapter = new ContactsAdapter(this, contactArrayList, MainActivity.this);
 
@@ -146,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void CreateContact(String name, String email, String phone, int position) {
 
-        long id = db.insertContact(name, email, phone);
-        Contact contact = db.getContact(id);
+        long id = contactAppDatabase.getContactDAO().addContact(new Contact(name, email, phone, 0));
+        Contact contact = contactAppDatabase.getContactDAO().getContact(id);
 
         if (contact != null) {
             contactArrayList.add(0, contact);
@@ -162,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         contact.setEmail(email);
         contact.setPhone(phone);
 
-        db.updateContact(contact);
+        contactAppDatabase.getContactDAO().updateContact(contact);
 
         contactArrayList.set(position,contact);
         contactsAdapter.notifyDataSetChanged();
@@ -171,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     private void DeleteContact(Contact contact, int position) {
 
         contactArrayList.remove(position);
-        db.deleteContact(contact);
+        contactAppDatabase.getContactDAO().deleteContact(contact);
         contactsAdapter.notifyDataSetChanged();
     }
 
